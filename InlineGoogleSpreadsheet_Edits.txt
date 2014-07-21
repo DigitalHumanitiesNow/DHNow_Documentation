@@ -1,0 +1,64 @@
+﻿Changes to DHNow Theme for Custom Schedule Embed
+
+
+The schedule is embedded using the Inline-Gdocs-Viewer.  However to prevent the spreadsheet from being too wide and spilling off the page, several edits were made to both the plugin and the theme’s stylesheet.   
+
+
+Requires changes to two files:
+1. The plugin php file: inline-gdocs-viewer.php
+2. The theme style.css file 
+
+
+The changes to the inline-gdocs-viewer.php file create an outer div that the scroll feature can then be applied to.  The changes were adopted from this site.  Replace the following lines in the inline-gdocs-viewer.php file (from the plugins editor):
+1. --- inline-gdocs-viewer.php.orig        (remove from php file) 
+2. +++ inline-gdocs-viewer.php    (add to php file)
+3. @@ Lines 110 in original php file:
+4.          $id = esc_attr($key);
+5.          $class = esc_attr($options['class']);
+6.          $summary = esc_attr($options['summary']);
+7. ---        $html = "<table id=\"igsv-$id\" class=\"igsv-table$class\" summary=\"$summary\">";
+8. +++        $html = "<div id=\"igsv-outer-div-$id\" class=\"igsv-outer-div\">";
+9. +++        $html .= "<table id=\"igsv-$id\" class=\"igsv-table$class\" summary=\"$summary\">";
+10.          if (!empty($caption)) {
+11.              $html .= '<caption>' . esc_html($caption) . '</caption>';
+12.          }
+13. @@ Lines 140 in original file:
+14.              }
+15.              $html .= "</tr>";
+16.          }
+17. ---        $html .= '</tbody></table>';
+18. +++       $html .= '</tbody></table></div>';
+19.  
+20.          if (false === $options['linkify'] || 'no' === strtolower($options['linkify'])) {
+21.              return $html;
+
+
+	
+
+
+
+The styles in the style.css theme file add a scrollbar to the sheet, adds vertical grey borders, and makes every odd row a darker color. These should be appended onto the existing stylesheet for the current theme (in the theme editor).
+/* This section edits the inline-gdocs styles on the schedule page (or anywhere else a google doc is embedded using this plugin. */
+
+
+#igsv-outer-div-11et6IfcIosco2FzLcsgOhnP5e26SXd4Demr7QL2la30 {
+        width:auto;
+        overflow:scroll;
+}
+
+
+.igsv-table td {
+        border-left: 1px #E8E8E8  solid;
+        min-width: 100px; !important
+        max-height: 70px; !important
+}
+
+
+.igsv-table tr {
+        max-height: 70px; !important
+}
+
+
+.igsv-table tr.even {
+        background-color: #F8F8F8 ;
+}
